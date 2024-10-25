@@ -45,7 +45,7 @@ Example usage:
 **📝 Note:**  
 There are other tasks already implemented in the project, and
 there are two http-request files in the project:
-- Average-api.http and Statistical-api.http
+- Average-api.http and Statistical-api.http.
 If you want to test the web servers, use the files instead of the curl command.
 
 
