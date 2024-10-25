@@ -1,0 +1,5 @@
+POST http://localhost:8000/
+Accept: application/json
+Content-Type: application/x-yaml
+
+TaskStatisticalAnalysis&10,5,6,7
