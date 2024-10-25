@@ -43,15 +43,15 @@ Example usage:
  curl -X POST -d "TaskStatisticalAnalysis&10,7,9,4" "http://localhost:8000"
 ```
 **📝 Note:**  
-There are other tasks already implemented in the project.
+-There are other tasks already implemented in the project.
 There are two http-request files in the project:
-Average-api.http and Statistical-api.http
-If you want to test the web servers, you can use the files as alternative to the curl command.
----
+-Average-api.http and Statistical-api.http
+If you want to test the web servers, you can use the files instead of the curl command.
+
 
 ⚠️ **Important Note:**  
 I have modified the docker file for fun but when I make a requests to the container I realized that the `WebServerSocket`
-that it uses http version 0.9 and the `WebServerHttp` uses http version 1.1.
+it uses http version 0.9 and the `WebServerHttp` uses http version 1.1.
 
 ## Running with Docker
 After you build the image, you can run the container with the following command:
