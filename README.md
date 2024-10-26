@@ -4,33 +4,49 @@ This project aims to create two kinds of multi-threaded web servers (with thread
 There are three tasks implemented and the user can add more (see details below).
 The web servers receive the command and the parameter(s) for running a task through terminal command `curl`.
 
-_P.S. There is another project where I used *ServerSocker* in GitHub: [localhost-chat-socket](https://github.com/wagnerjfr/localhost-chat-socket)_
+_P.S. There is another project where I used *ServerSocker* in
+GitHub: [localhost-chat-socket](https://github.com/wagnerjfr/localhost-chat-socket)_
 
 ## Full article
+
 ### [Unveiling Two Dynamic Multi-Threaded Web Servers for Task Execution](https://levelup.gitconnected.com/unveiling-two-dynamic-multi-threaded-web-servers-for-task-execution-62644e78a04a)
+
 _Different Type of Web Serves Using HttpServer and ServerSocket_
 
 ## WebServers
-* **WebServerHttp** is developed using *HttpServer* [[javadoc](https://docs.oracle.com/javase/8/docs/jre/api/net/httpserver/spec/com/sun/net/httpserver/HttpServer.html)].
 
-* **WebServerSocket** is developed using *ServerSocket* [[javadoc](https://docs.oracle.com/javase/8/docs/api/java/net/ServerSocket.html)].
+* **WebServerHttp** is developed using
+  *HttpServer* [[javadoc](https://docs.oracle.com/javase/8/docs/jre/api/net/httpserver/spec/com/sun/net/httpserver/HttpServer.html)].
 
-Both web servers use *ExecutorService* [[javadoc](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html)] that executes each submitted task in the pooled thread, more specifically, `Executors.newCachedThreadPool()` which is an unbounded thread pool with automatic thread reclamation [[javadoc](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Executors.html#newCachedThreadPool--)].
+* **WebServerSocket** is developed using
+  *ServerSocket* [[javadoc](https://docs.oracle.com/javase/8/docs/api/java/net/ServerSocket.html)].
+
+Both web servers use
+*ExecutorService* [[javadoc](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html)] that
+executes each submitted task in the pooled thread, more specifically, `Executors.newCachedThreadPool()` which is an
+unbounded thread pool with automatic thread
+reclamation [[javadoc](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Executors.html#newCachedThreadPool--)].
 
 ## New Tasks
 
 ### 1. Average Calculator
+
 The Average Calculator task processes a comma-separated list of numbers and returns:
+
 - Average value
 - Maximum value
 - Minimum value
 
 Example usage:
+
 ```bash
  curl -X POST -d "TaskAverage&10,7,9,4" "http://localhost:8000"
 ```
+
 ### 2. Statistical Analysis
+
 The Statistical Analysis task provides comprehensive statistical metrics for a given set of numbers including:
+
 - Mean
 - Median
 - Variance
@@ -39,9 +55,11 @@ The Statistical Analysis task provides comprehensive statistical metrics for a g
 - Sample Size
 
 Example usage:
+
 ```bash
  curl -X POST -d "TaskStatisticalAnalysis&10,7,9,4" "http://localhost:8000"
 ```
+
 **📝 Note:**  
 There are other tasks already implemented in the project.
 There are two http-request files in the project:
@@ -50,11 +68,14 @@ If you want to test the web servers, you can use the files as alternative to the
 ---
 
 ⚠️ **Important Note:**  
-I have modified the docker file for fun but when I make a requests to the container I realized that the `WebServerSocket`
+I have modified the docker file for fun but when I make a requests to the container I realized that the
+`WebServerSocket`
 that it uses http version 0.9 and the `WebServerHttp` uses http version 1.1.
 
 ## Running with Docker
+
 After you build the image, you can run the container with the following command:
+
 ```bash
 docker run -p 8000:8000 web-server:latest
 ```
@@ -62,14 +83,17 @@ docker run -p 8000:8000 web-server:latest
 ## Project Screenshots
 
 ### Directory Structure
+
 The project's images are stored in the `resources/images/` directory from the main directory.
 
 ### Available Screenshots
 
 #### Web Server Execution
+
 ![Server Startup](./src/main/resources/images/server-startup.png)
 
 #### Task Outputs
+
 ![Average Task](./src/main/resources/images/average-task.png)
 *Average calculator task execution with sample input*
 
@@ -77,19 +101,63 @@ The project's images are stored in the `resources/images/` directory from the ma
 *Statistical analysis task showing its calculated metrics*
 
 #### Server Logs
+
 ![Server Logs](./src/main/resources/images/server-output.png)
 *Server logs showing the execution of the tasks*
 
 ## JAR File Execution
 
 ### Building the JAR
+
 Build the project JAR file using Maven:
+
 ```bash
 mvn clean package
 ```
+
 ### Running the JAR
+
 Execute the generated JAR file from the target directory:
+
 ```bash
 java -jar target/Web-Server-1.0-Final.jar
 ```
 
+## Performance Testing
+
+The application includes comprehensive performance tests using k6 for the TaskStatisticalAnalysis functionality. These
+tests evaluate different aspects of system performance under various conditions.
+
+### Test Types
+
+1. **Load Test** (load-test.js)
+    - Simulates normal usage patterns
+    - Ramps up to 1000 users over 30s
+    - Maintains 500 users for 1 minute
+    - Gradually scales down
+
+2. **Stress Test** (stress-test.js)
+    - Tests system limits
+    - Maintains 2000 concurrent users for 5 minutes
+    - Uses varied statistical inputs
+    - Evaluates system stability under heavy load
+
+3. **Spike Test** (spike-test.js)
+    - Tests sudden traffic surges
+    - Quickly ramps up to 3000 users
+    - Uses large datasets
+    - Evaluates system recovery
+
+4. **Endurance Test** (endurance-test.js)
+    - Long-duration testing (4 hours)
+    - Maintains constant load of 500 users
+    - Uses complex statistical calculations
+    - Evaluates system stability over time
+
+### Running Tests
+
+Execute tests using Docker with:
+
+```bash
+Get-Content ./{test-file}.js | docker run --add-host=host.docker.internal:host-gateway --rm -i grafana/k6 run -
+```
