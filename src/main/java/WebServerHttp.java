@@ -13,6 +13,7 @@ public class WebServerHttp {
         HttpServer server = HttpServer.create(new InetSocketAddress(PORT), 0);
         server.createContext("/", new RequestsHandlerHttp());
         //server.setExecutor(Executors.newFixedThreadPool(1));
+        //server.setExecutor(Executors.newCachedThreadPool());
         server.setExecutor(Executors.newCachedThreadPool());
 
         server.start();
