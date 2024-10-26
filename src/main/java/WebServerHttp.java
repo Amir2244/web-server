@@ -14,7 +14,7 @@ public class WebServerHttp {
         server.createContext("/", new RequestsHandlerHttp());
         //server.setExecutor(Executors.newFixedThreadPool(1));
         //server.setExecutor(Executors.newCachedThreadPool());
-        server.setExecutor(Executors.newCachedThreadPool());
+        server.setExecutor(Executors.newVirtualThreadPerTaskExecutor());
 
         server.start();
         System.out.println("WebServerHttp is listening on port " + PORT);
